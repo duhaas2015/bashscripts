@@ -24,7 +24,9 @@ A comprehensive bash script for macOS that collects detailed network, system, an
 - **Hostname**: Computer hostname
 - **MacBook Model**: Full model name including chip (e.g., "MacBook Pro M2 Pro")
 - **Citrix Version**: Citrix Workspace client version (if installed)
-- **Memory Free**: Available memory in MB
+- **Last Sleep Time**: Date/time when Mac last went to sleep
+- **Last Lid Close Time**: Date/time when display was last turned off (lid closed)
+- **Memory Free**: Available memory in MB (includes free, inactive, and speculative pages)
 - **CPU Usage**: CPU usage percentage
 
 ### Latency Tests
@@ -159,23 +161,25 @@ To change the interval, modify the `sleep 15` line at the end of the main loop.
 Data is saved to a timestamped CSV file with the following columns:
 
 ```
-Timestamp,Hostname,MacBook_Model,Citrix_Version,WiFi_Status,SSID,Wireless_Signal,
-Wireless_Channel,Local_IP,Egress_IP,VPN_Tunnel_IP,DNS_Server,DNS_Latency_ms,
-VPN_Connected,VPN_Name,VPN_Latency_ms,Memory_Free_MB,CPU_Usage_Percent,
-Latency_Google_ms,Latency_US_East_Coast_ms,Latency_US_West_Coast_ms,
+Timestamp,Hostname,MacBook_Model,Citrix_Version,Last_Sleep_Time,Last_Lid_Close_Time,
+WiFi_Status,SSID,Wireless_Signal,Wireless_Channel,Local_IP,Egress_IP,VPN_Tunnel_IP,
+DNS_Server,DNS_Latency_ms,VPN_Connected,VPN_Name,VPN_Latency_ms,Memory_Free_MB,
+CPU_Usage_Percent,Latency_Google_ms,Latency_US_East_Coast_ms,Latency_US_West_Coast_ms,
 Download_Mbps,Upload_Mbps
 ```
 
 ### Console Output
 Real-time display showing:
 ```
-[2025-10-23 14:30:15] hostname (MacBook Pro M2 Pro) Citrix:25.03.10 | WiFi: Connected |
-SSID: NetworkName | Signal: -65 dBm | Channel: 36 | Local IP: 192.168.1.100 |
-Egress IP: 65.31.177.28 | VPN Tunnel: 10.5.0.2 | DNS: 192.168.1.1 (2.5ms) |
-VPN: Yes (15.7ms) - NordVPN NordLynx | Mem Free: 8192.50MB | CPU: 12.5% |
-Latency: Google=18.7 ms, US-East=45.2 ms, US-West=17.4 ms |
-Down: 85.32 Mbps | Up: 22.45 Mbps
+[2025-10-23 14:30:15] hostname (MacBook Pro M2 Pro) Citrix:25.03.10 |
+WiFi: Connected | SSID: NetworkName | Signal: -65 dBm | Channel: 36 |
+Local IP: 192.168.1.100 | Egress IP: 65.31.177.28 | VPN Tunnel: 10.5.0.2 |
+DNS: 192.168.1.1 (2.5ms) | VPN: Yes (15.7ms) - NordVPN NordLynx |
+Mem Free: 8192.50MB | CPU: 12.5% | Latency: Google=18.7 ms, US-East=45.2 ms,
+US-West=17.4 ms | Down: 85.32 Mbps | Up: 22.45 Mbps
 ```
+
+**Note**: Last Sleep Time and Last Lid Close Time are tracked but not displayed in console output (available in CSV and Google Sheets).
 
 ## Speed Test Details
 
@@ -257,7 +261,8 @@ Edit the `run_speedtest()` function:
 
 - **CPU Usage**: Minimal (~1-2% on average)
 - **Network Usage**: ~12MB per iteration (10MB download + 2MB upload)
-- **Disk Usage**: CSV file grows by ~200 bytes per row
+- **Disk Usage**: CSV file grows by ~250 bytes per row
+- **Google Sheets**: One API call per iteration (15 seconds)
 
 ## Security Considerations
 
@@ -278,6 +283,9 @@ Created for network monitoring and diagnostics on macOS.
 
 ## Version History
 
+- **v1.2** - Added Last Sleep Time and Last Lid Close Time tracking via pmset logs
+- **v1.1** - Added Google Sheets integration, VPN name and tunnel IP tracking
 - **v1.0** - Initial release with comprehensive network, VPN, and system metrics
-- Includes Google Sheets integration
-- Native speed test implementation
+  - Native speed test implementation
+  - Citrix Workspace version detection
+  - Multi-location latency testing
