@@ -21,6 +21,7 @@ curl -s -L -X POST "$GOOGLE_SHEETS_URL" \
 echo "Starting network statistics collection..."
 echo "Data will be saved to: $CSV_FILE"
 echo "Data will also be sent to Google Sheets"
+echo -e "\033[0;32mView your data: https://docs.google.com/spreadsheets/d/1ddpwUQhf7Vx0sHyaEwmSZXRlUqfsQ_sAbKGGfzOEGCg/edit?usp=sharing\033[0m"
 echo "Press Ctrl+C to stop"
 echo ""
 
@@ -72,7 +73,7 @@ get_last_sleep_time() {
 
 # Function to get last lid close time
 get_last_lid_close_time() {
-    local lid_close_time=$(pmset -g log | grep -E "Display is turned off" | tail -1 | awk '{print $1" "$2}')
+    local lid_close_time=$(pmset -g log | grep "Clamshell Sleep" | tail -1 | awk '{print $1" "$2}')
     if [ -z "$lid_close_time" ]; then
         echo "N/A"
     else
