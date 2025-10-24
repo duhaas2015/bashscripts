@@ -25,7 +25,7 @@ A comprehensive bash script for macOS that collects detailed network, system, an
 - **MacBook Model**: Full model name including chip (e.g., "MacBook Pro M2 Pro")
 - **Citrix Version**: Citrix Workspace client version (if installed)
 - **Last Sleep Time**: Date/time when Mac last went to sleep
-- **Last Lid Close Time**: Date/time when display was last turned off (lid closed)
+- **Last Lid Close Time**: Date/time when MacBook lid was last closed (uses "Clamshell Sleep" events)
 - **Memory Free**: Available memory in MB (includes free, inactive, and speculative pages)
 - **CPU Usage**: CPU usage percentage
 
@@ -141,6 +141,7 @@ Run the script:
 The script will:
 - Create a timestamped CSV file (e.g., `network_stats_20251023_143022.csv`)
 - Send data to Google Sheets (if configured)
+- Display a green link to view your Google Sheets data in real-time
 - Display real-time statistics in the console
 - Collect data every 15 seconds
 
@@ -283,6 +284,9 @@ Created for network monitoring and diagnostics on macOS.
 
 ## Version History
 
+- **v1.3** - Improved lid close detection and user experience enhancements
+  - Updated lid close tracking to use "Clamshell Sleep" events for more accurate detection
+  - Added green-colored Google Sheets link display on script startup for easy access
 - **v1.2** - Added Last Sleep Time and Last Lid Close Time tracking via pmset logs
 - **v1.1** - Added Google Sheets integration, VPN name and tunnel IP tracking
 - **v1.0** - Initial release with comprehensive network, VPN, and system metrics
